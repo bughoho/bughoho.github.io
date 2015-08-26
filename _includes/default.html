@@ -79,7 +79,13 @@
 			<div class="col-sm-4 hidden-xs typo" style=" padding-top: 90px; ">
 		<h4>扫一扫，手机阅读</h4>
 		<div class='qrcode'></div>
-
+		<script type="text/javascript">
+		  $("#code").qrcode({
+		    width: 150,
+		    height: 150,
+		    text: "http:{{ site.url }}{{ page.url }}"
+		  });
+		</script>
 		<div id="sideBar">
 		</div>
 
