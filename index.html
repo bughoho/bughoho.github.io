@@ -1,212 +1,106 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Full Stack Research</title>
-	
-	<meta name="author" content="bughoho">
-
-	<!-- Enable responsive viewport -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-	<!--[if lt IE 9]>
-	<script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-	<![endif]-->
-
-	<!-- Le styles -->
-	<link href="/assets/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/assets/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	<link href="/assets/resources/typo/typo.css" rel="stylesheet">
-	<link href="/assets/resources/syntax/syntax.css" rel="stylesheet">
-	<link href="/assets/css/style.css" rel="stylesheet">
-
-	<!-- Le fav and touch icons -->
-	
-	<link rel="icon" href="/favicon.ico" type="image/x-icon">
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-	<!-- Update these with your own images
-	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-	-->
-
-	<link rel="alternate" type="application/rss+xml" title="" href="/rss.xml">
-
-	<!-- <script src="http://cdn.bootcss.com/jquery/1.8.2/jquery.min.js"></script> -->
-	<script src="http://cdn.bootcss.com/jquery/1.10.1/jquery.min.js"></script>
-	<!--google analyse-->
-	<script>
-	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-	  ga('create', 'UA-37440538-1', 'pchou.info');
-	  ga('send', 'pageview');
-
-	</script>
-</head>
-
-<body>
- 	<nav class="navbar-default visible-xs">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-		</div>
-
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li><a href="/">首页</a></li>
-				<li><a href="/category.html">分类</a></li>
-				<li><a href="/tag.html">标签</a></li>
-				<li><a href="/series.html">系列文章</a></li>
-			</ul>
-		</div>
-	</nav>
-
-	<div id="left-side" class="col-sm-3 sidebar hidden-xs">
-		<!-- 
-<header class="sidebar-header" role="banner">
-	<a href="/">
-		<img src="http://www.gravatar.com/avatar/46ebc49bce685bbd1212189e9877660a?s=150" class="img-circle" />
-	</a>
-	<h3 class="title">
-        <a href="/"></a>
-    </h3>
-</header> -->
-
-
-<div id="bio" class="text-center">
-	Full Stack Research
-</div>
-
-
-<div class='navigator text-center'>
-<!-- 	<a href='/index.html' title='首页'>&#xf012b;</a>
-	<a href='/rss.xml' title='RSS订阅'>&#xf01bc;</a>
-	<a href='/me.html' title='关于我'>&#xf00cc;</a>
-	<a href='/series.html' title='系列文章'>&#xf0161;</a> -->
-	<a href='/index.html' title='首页'"><i class="fa fa-home fa-lg"></i></a>
-	<a href='/rss.xml' title='RSS订阅'>&#xf01bc;</a>
-	<a href='/me.html' title='关于我'>&#xf00cc;</a>
-	<a href='/series.html' title='系列文章'>&#xf0161;</a>
-</div>
-
-<div class='category'>
-	<ul>
-		
-			<li><a href="/category.html#compiler">compiler<span>1</span></a></li>
-		
-	</ul>
-</div>
-
-<div class='tags'>
-	
-		<a href="/tag.html#compiler" style='font-size:17px;'>compiler</a>
-	
-		<a href="/tag.html#llvm" style='font-size:17px;'>llvm</a>
-	
-</div>
-<div class='foot text-center'>
-	<p>Powered by</p><p><a href='https://github.com/'>Github</a> <a href='http://jekyllrb.com/'>jekyll</a> <a href="http://www.bootcss.com/">bootstrap</a> <a href="http://typo.sofi.sh/">typo.css</a> <a href="http://jekyllthemes.org/themes/dbyll/">Dbyll</a> <a href="http://disqus.com" class="dsq-brlink">Disqus</a></p>
-</div>
-	</div>
-
-	<div class="col-sm-9 typo" style="background-color:#fff;">
-		<div class="col-sm-8" style=" padding: 40px 0; "><div class="page-header">
-  <h1>Full Stack Research </h1>
-</div>
+---
+layout: page
+tagline:
+title: Full Stack Research
+---
 
 <ul class="pager"> 
 
-  
+  {% if paginator.previous_page %}
+  <li class="previous">
+    {% if paginator.previous_page == 1 %}
+    <a href="{{ site.BASE_PATH }}/">&larr; Newer</a>
+    {% else %}
+    <a href="{{ site.BASE_PATH }}/{{ site.paginate_path | replace: ':num', paginator.previous_page }}">&larr; Newer</a>
+    {% endif %}
+  </li>
+  {% else %}
   <li class="previous disabled">
     <a>&larr; Newer</a>
   </li>
-  
+  {% endif %}
   
   <li class="hidden-xs">
-    <span class="page_number">Page: 1 of 1</span>
+    <span class="page_number">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
   </li>
 
-  
+  {% if paginator.next_page %}
+  <li class="next">
+    <a href="{{ site.BASE_PATH }}/{{ site.paginate_path | replace: ':num', paginator.next_page }}">Older &rarr;</a>
+  </li>
+  {% else %}
   <li class="next disabled">
     <a>Older &rarr;</a>        
   </li>
-  
+  {% endif %}
 
 </ul>
 
-
+{% for post in paginator.posts %}
 
 <article class="home">
   <small>
-    
-    August
-    26th,
-    
-    2015
+    {% assign d = post.date | date: "%d" | plus:'0' %}
+    {{ post.date | date: "%B" }}
+    {% case d %}
+    {% when 1 or 21 or 31 %}{{ d }}st,
+    {% when 2 or 22 %}{{ d }}nd,
+    {% when 3 or 23 %}{{ d }}rd,
+    {% else %}{{ d }}th,
+    {% endcase %}
+    {{ post.date | date: "%Y" }}
   </small>
 
   <h2>
-    <a href="/compiler/2015/08/26/test.html">这是一个测试页面</a>
+    <a href="{{ site.BASE_PATH }}{{ post.url }}">{{ post.title }}</a>
   </h2>
 
   <p>
-    
-    
-    <p>这是一个测试页面</p>
-
-
-    
-    
+    {% if post.fullview %}
+    {{ post.content }}
+    {% else %}
+    {% if post.shortinfo %}
+    {{ post.shortinfo }}
+    {% elsif post.description %}
+    {{ post.description }}
+    {% else %}
+    {{ post.excerpt }}
+    {% endif %}
+    {% endif %}
   </p>
 
 </article>
-
+{% endfor %}
 <hr/>
 
 <ul class="pager"> 
 
-  
+  {% if paginator.previous_page %}
+  <li class="previous">
+    {% if paginator.previous_page == 1 %}
+    <a href="{{ site.BASE_PATH }}/">&larr; Newer</a>
+    {% else %}
+    <a href="{{ site.BASE_PATH }}/{{ site.paginate_path | replace: ':num', paginator.previous_page }}">&larr; Newer</a>
+    {% endif %}
+  </li>
+  {% else %}
   <li class="previous disabled">
     <a>&larr; Newer</a>
   </li>
-  
+  {% endif %}
   
   <li class="hidden-xs">
-    <span class="page_number">Page: 1 of 1</span>
+    <span class="page_number">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
   </li>
 
-  
+  {% if paginator.next_page %}
+  <li class="next">
+    <a href="{{ site.BASE_PATH }}/{{ site.paginate_path | replace: ':num', paginator.next_page }}">Older &rarr;</a>
+  </li>
+  {% else %}
   <li class="next disabled">
     <a>Older &rarr;</a>        
   </li>
-  
+  {% endif %}
 
 </ul>
-
-
-</div>
-			<div class="col-sm-4 hidden-xs typo" style=" padding-top: 90px; ">
-		<h4>扫一扫，手机阅读</h4>
-		<div class='qrcode'></div>
-		<div id="sideBar">
-		</div>
-
-	</div>
-
-	</div>
-
-
-	<script src="http://cdn.bootcss.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="http://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
-	<script type="text/javascript" src="/assets/resources/bootstrap/js/stick.min.js"></script>
-	<script type="text/javascript" src="/assets/js/app.js"></script>
-</body>
-</html>
-
