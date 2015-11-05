@@ -17,12 +17,12 @@ defaults:
 description: "bughoho Full Stack Research, share technology post"
 author:
   name: bughoho
-  email: onesbug@gmail.com
+  email: bughoho@gmail.com
   github: dbtek
   twitter: dbtek
   pinterest: asd123
   linkedin: asd123
-  bio: Full Stack Research
+  bio: bughoho Full Stack Research
   email_md5: 46ebc49bce685bbd1212189e9877660a
 
 rss_path: feed.xml
