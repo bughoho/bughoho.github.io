@@ -10,7 +10,7 @@ title: About
 <p>这里存放的文章和作品都为原创内容.</p>
 <p>IT技术兴趣范围：</p>
 * 编译原理：编译器、反编译器、虚拟机指令转译,etc...
-* 逆向技术：程序逆向、加壳\脱壳,etc...
+* 逆向技术：程序逆向、加壳\脱壳、破解,etc...
 
 ## Build Detail
 
@@ -19,6 +19,6 @@ title: About
 * 内容使用 [GitHub Pages](https://pages.github.com) 存放和维护.
 * 文章使用 [Sublime Text 3](http://sublimetext.com) 神器编写.
 
-有什么问题和建议吗? 给我发E-mail吧:onesbug$gmail.com
+有什么问题和建议吗? 给我发E-mail吧:onesbug[at]gmail.com
 
 Thanks for reading!
