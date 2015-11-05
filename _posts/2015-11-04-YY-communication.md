@@ -1,7 +1,7 @@
 ---
 layout: postlayout
 title: YY 2015 逆向分析(一) 底层通讯机制
-categories: [reserve engineering]
+categories: [ReserveEngineering]
 tags: [yy,reserve,network]
 ---
 YY 2015 逆向分析(一) 底层通讯机制
