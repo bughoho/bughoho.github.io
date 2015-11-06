@@ -12,14 +12,14 @@ defaults:
     scope:
       path: "" # empty string for all files
     values:
-      title: "bughoho Full Stack Research"
+      title: "bughoho 全栈研究"
 
-description: "bughoho Full Stack Research, share technology post"
+description: "bughoho 全栈研究, share technology post"
 author:
   name: bughoho
   email: bughoho@gmail.com
-  github: dbtek
-  twitter: dbtek
+  github: bughoho
+  twitter: bughoho
   pinterest: asd123
   linkedin: asd123
   bio: bughoho Full Stack Research
