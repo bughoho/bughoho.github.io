@@ -3,7 +3,7 @@ layout: postlayout
 title: 各种开源汇编、反汇编引擎的非专业比较
 categories: [disassembly]
 tags: [disassembly]
-keywords: udis86,bochs,capstone,
+keywords: udis86,bochs,capstone,开源,汇编,反汇编,引擎
 ---
 　　由于平时业余兴趣和工作需要，研究过并使用过时下流行的各种开源的x86/64汇编和反汇编引擎。如果要对汇编指令进行分析和操作，要么自己研究Intel指令集
 写一个，要么就用现成的开源引擎。自己写太浪费时间，又是苦力活，还容易出错，所以还是使用现成的好一点。  
