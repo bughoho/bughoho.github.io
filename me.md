@@ -19,6 +19,6 @@ title: About
 * 内容使用 [GitHub Pages](https://pages.github.com) 存放和维护.
 * 文章使用 [Sublime Text 3](http://sublimetext.com) 神器编写.
 
-有什么问题和建议吗? 给我发E-mail吧:onesbug[at]gmail.com
+有什么问题和建议吗? 给我发E-mail吧:bughoho[at]gmail.com
 
 Thanks for reading!
