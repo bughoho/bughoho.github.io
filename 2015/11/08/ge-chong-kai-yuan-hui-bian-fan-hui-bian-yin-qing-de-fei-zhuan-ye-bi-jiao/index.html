@@ -1,0 +1,254 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>各种开源汇编、反汇编引擎的非专业比较 | 先生请出山</title><meta name="author" content="先生请出山"><meta name="copyright" content="先生请出山"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="由于平时业余兴趣和工作需要，研究过并使用过时下流行的各种开源的x86&#x2F;64汇编和反汇编引擎。如果要对汇编指令进行分析和操作，要么自己研究Intel指令集写一个，要么就用现成的开源引擎。自己写太浪费时间，又是苦力活，还容易出错，所以还是使用现成的好一点。   这里对我曾使用过的比较流行的反汇编引擎做个比较，我使用过的反汇编引擎有：   ##1. Ollydbg的ODDisassm　　O">
+<meta property="og:type" content="article">
+<meta property="og:title" content="各种开源汇编、反汇编引擎的非专业比较">
+<meta property="og:url" content="https://sirtech.cc/2015/11/08/ge-chong-kai-yuan-hui-bian-fan-hui-bian-yin-qing-de-fei-zhuan-ye-bi-jiao/index.html">
+<meta property="og:site_name" content="先生请出山">
+<meta property="og:description" content="由于平时业余兴趣和工作需要，研究过并使用过时下流行的各种开源的x86&#x2F;64汇编和反汇编引擎。如果要对汇编指令进行分析和操作，要么自己研究Intel指令集写一个，要么就用现成的开源引擎。自己写太浪费时间，又是苦力活，还容易出错，所以还是使用现成的好一点。   这里对我曾使用过的比较流行的反汇编引擎做个比较，我使用过的反汇编引擎有：   ##1. Ollydbg的ODDisassm　　O">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://assets.sirtech.cc/img/202404051113084.png">
+<meta property="article:published_time" content="2015-11-08T00:00:00.000Z">
+<meta property="article:modified_time" content="2015-11-08T00:00:00.000Z">
+<meta property="article:author" content="先生请出山">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://assets.sirtech.cc/img/202404051113084.png"><link rel="shortcut icon" href="https://assets.sirtech.cc/img/202404051113084.png"><link rel="canonical" href="https://sirtech.cc/2015/11/08/ge-chong-kai-yuan-hui-bian-fan-hui-bian-yin-qing-de-fei-zhuan-ye-bi-jiao/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="baidu-site-verification" content="codeva-PYZD91ZQgs"/><link rel="stylesheet" href="/css/index.css?v=5.0.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?3f2e1fdd5af8257f92ee9d6bef1b8dca";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-S6J6RHCLSK"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-S6J6RHCLSK')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-S6J6RHCLSK', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oe3vigjws6");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'medium_zoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '各种开源汇编、反汇编引擎的非专业比较',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2015-11-08 00:00:00'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="先生请出山" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://assets.sirtech.cc/img/202404051113084.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-language"></i><span> 语言</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://en.sirtech.cc/"><i class="fa-fw fas fa-e"></i><span> English</span></a></li><li><a class="site-page child" href="/"><i class="fa-fw fas fa-c"></i><span> 中文</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="https://assets.sirtech.cc/img/nav.webp" alt="Logo"><span class="site-name">先生请出山</span></a><a class="nav-page-title" href="/"><span class="site-name">各种开源汇编、反汇编引擎的非专业比较</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-language"></i><span> 语言</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://en.sirtech.cc/"><i class="fa-fw fas fa-e"></i><span> English</span></a></li><li><a class="site-page child" href="/"><i class="fa-fw fas fa-c"></i><span> 中文</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">各种开源汇编、反汇编引擎的非专业比较</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2015-11-08T00:00:00.000Z" title="发表于 2015-11-08 00:00:00">2015-11-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2015-11-08T00:00:00.000Z" title="更新于 2015-11-08 00:00:00">2015-11-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/disassembly/">disassembly</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>　　由于平时业余兴趣和工作需要，研究过并使用过时下流行的各种开源的x86&#x2F;64汇编和反汇编引擎。如果要对汇编指令进行分析和操作，要么自己研究Intel指令集<br>写一个，要么就用现成的开源引擎。自己写太浪费时间，又是苦力活，还容易出错，所以还是使用现成的好一点。  </p>
+<p>这里对我曾使用过的比较流行的反汇编引擎做个比较，我使用过的反汇编引擎有：  </p>
+<p>##1. Ollydbg的ODDisassm<br>　　Ollydbg的<a target="_blank" rel="noopener" href="http://www.ollydbg.de/">ODDisassm</a>，这是我最早使用的一个开源的反汇编引擎，07年在<a target="_blank" rel="noopener" href="http://bbs.pediy.com/showthread.php?t=66210">《加密解密》（三）</a><br>中我写的一个很简单的虚拟机就是使用的这个库，因为那个时候还没有那么多可选择。不过多亏有这样一个基础库，整个虚拟机从设计到开发完成只用了两个星期便开发完成<br>（当时对反汇编库的要求不高，只要求能用字符串文本做中间表示进行编码&#x2F;解码）。<br>　　这个反汇编库的优点是含有汇编接口（即文本解析，将文本字符串解析并编码成二进制），就拿这个特性来说在当时也算是独树一帜的了，到目前为止开源界在做这个工作的人也很少，<br>不过近年出现的调试器新秀x64dbg，也附带开发了开源的汇编库XEDParse，功能与OD的文本解析功能相似，并且支持的指令集更加完整，BUG更少，同时还支持X64，维护一直很强劲。<br>但是ODDisassm的缺点也很多，比如：<br>　　1. 指令集支持不全，由于Ollydbg年久失修，现在甚至连对MMX指令集都不全，而现在的INTEL&#x2F;AMD的扩展指令集标准又更新了多个版本，什么SSE5&#x2F;AVX&#x2F;AES&#x2F;XOP就更别提了，完全无法解析。<br>　　2. 解码出来的结构不详细，比如指令前缀支持不够友好，这点从Ollydbg的反汇编窗口可以看出，除了movs&#x2F;cmps等指令以外，repcc与其他指令组合时都是单独分开的；<br>    再比如寄存器无法表示<code>ah\bh\ch\dh</code>这种高8位寄存器。<br>　　3. 作者一次性开源后便不再维护开源版本，对于反汇编上的BUG很难即时修复。  </p>
+<p>　　不过这些也可以理解，因为在当时作者的开发目的是进行文本汇编\反汇编，所以没有为解码出的信息建立结构体以及接口。总的来说，如今再使用这个反汇编引擎，<br>已经落后于时代了。  </p>
+<p>##2. BeaEngine<br>　　<a target="_blank" rel="noopener" href="https://github.com/BeaEngine/beaengine">BeaEngine</a>是我用的第二个库，当时使用OD库已经不能满足我的需求了。<br>在做反编译器的时候，需要一个能够解码信息越多越好的库，于是我找到了<code>BeaEngine</code>，这个库我记得以前的版本不支持高8位寄存器识别，现在的版本也支持了。<br>在使用过程中基本上没有发现什么明显的缺点，不常用的新的扩展指令集也实现了不少。<br>　　目前实现的扩展指令集有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FPU, MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, VMX, CLMUL, AES, MPX</span><br></pre></td></tr></table></figure>
+<p>　　同时它也给不同种类的指令进行了分类，这在判断不同指令时很方便。它还有一个特点是可以解码出每一条指令所使用到和影响到的寄存器，<br>包括标志位寄存器，甚至精确到标志位寄存器的每一个位置。<br>这个功能用来做优化器与混淆器再好不过了。<br>　　但是个人认为<code>BeaEngine</code>的编码风格实在是不咋地，各种变量强制转换，各种命名风格，给人一种乱乱的感觉。<br>对我这种对编码有洁癖的人来说，实在是无法忍受，所以后来又换了其他的库。如果你不在意这些，BeaEngine的性能还是比较不错的。<br>还有一点，BeaEngine经常性的爆出一些BUG，所以使用它时要有心理准备。  </p>
+<p>##3. udis86<br>　　<a target="_blank" rel="noopener" href="https://github.com/vmt/udis86"><code>udis86</code></a>应该是我最喜爱的反汇编引擎了。<br>udis86支持的X86扩展指令集有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MMX, FPU (x87), AMD 3DNow, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AES, AMD-V, INTEL-VMX, SMX</span><br></pre></td></tr></table></figure>
+<p>　　udis86的代码风格十分简洁，功能函数短小，变量命名清楚又简洁，接口干净意思明白，操作灵活，如果你自己有需求维护一个自己的分支，花不了几十分钟的时间就能熟悉整个代码构架。<br>　　说了这么多溢美之词，它到底有什么优点呢？<br>　　udis86的优点就是接口很灵活，你可以选择对一条指令使用<code>ud_decode</code>只进行解码，再对解码后的结构使用<code>ud_translate_intel</code>转换成文本格式，<br>或者你也可以直接使用<code>ud_disassemble</code>一次性完成整个操作。而且这些接口都只需要一行就能搞定。<br>由于udis86的这种组合模式设计理念，他可以适应各种场景，如果你要开发一个IDA那样的反汇编器，它能做；<br>你要开发一个指令模拟器、分析器、优化器、混淆器，它也能做。<br>　　这种理念直接使udis86在拥有了强大的适应能力的同时还兼顾了性能，我做过性能测试，<br>udis86是我用过的<font color='red'>解码细节能力相近</font>的情况下，解码速度最快的引擎了。<br>　　至于缺点的话，目前还没发现，不过，udis86不支持BeaEngine那种的寄存器分析，算是点小遗憾。</p>
+<p>##4. Capstone<br>　　<a target="_blank" rel="noopener" href="https://github.com/aquynh/capstone"><code>capstone</code></a>应该算是所有反汇编引擎中集大成者了，对于它我要多费点口水，因为我对他是又爱又恨。<br>capstone是基于<code>LLVM</code>框架中的MC组件部分移植过来，所以<code>LLVM</code>支持的<code>CPU</code>构架，capstone也都支持。<br>　　它支持的CPU构架有:<code>Arm, Arm64 (Armv8), M68K, Mips, PowerPC, Sparc, SystemZ, XCore &amp; X86 (include X86_64)</code>。<br>　　而且Capstone对X86构架的指令集支持是最全的，这一点是其他引擎都比不上的，其支持的X86扩展指令集有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3dnow, 3dnowa, x86_64, adx, aes, atom, avx, avx2, avx512cd, avx512er, avx512f, avx512pf, bmi, bmi2, fma, fma4, fsgsbase, lzcnt, mmx, sha, slm, sse, sse2, sse3, sse4.1, sse4.2, sse4a, ssse3, tbm, xop.</span><br></pre></td></tr></table></figure>
+<p>　　很强吧？<br>　　在目前移动端如此火热的背景下，支持ARM的反汇编库还是非常少的，如果要同时进行X86与ARM下的编译器方面的开发，能使用一个统一的接口那自然是更好。<br>另外capstone的<code>next</code>分支（<code>master</code>分支没有这个接口）中也支持BeaEngine那种解码时分析指令使用和影响到的寄存器这种炫酷的特技，有这样的基础库存在真的可以偷不少的懒。<br>　　仅从X86&#x2F;64平台来看，无论是从解码能力还是指令集支持，<code>Capstone</code>可以称得上是一个完全超越了<code>BeaEngine</code>的存在。<br>　　老套路，说完了好话，又该说缺点了。<br>　　由于<code>capstone</code>是从<code>LLVM</code>移植过来，<code>capstone</code>是<code>C</code>语言的项目，而<code>LLVM</code>是<code>C++</code>项目，所以在移植过程中做了很多适配工作，显得很臃肿。<br>　　举个栗子，<code>LLVM</code>中的<code>MCInst</code>是一个单条底层机制指令的描述类，由于<code>capstone</code>是C项目，<br>    移植时将这些类变成了结构，把成员函数变成了独立的C函数，比如<code>MCInst_Init</code>，<code>MCInst_setOpcode</code>等等。并且由于<code>LLVM</code>框架的复杂性和高度兼容性，<br>里面的所有的概念都做了高度抽象，并且Capstone又做了适配接口将其转换到自己的构架中，这会造成解码时中间层过多，性能下降。一条指令的解码过程用到的重要的中间层结构顺序是这样的：  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MCInst =&gt; InternalInstruction =&gt; cs_insn</span><br></pre></td></tr></table></figure>
+<p>　　最基础的解码工作依靠LLVM的构架解码到Capstone的<code>InternalInstruction</code>，它是一个包含了解码过程中的所有细节的内部结构，<br>解码完成后再调用<code>update_pub_insn</code>将认为需要公开暴露出来的内容复制到<code>cs_insn</code>中。而其他反汇编引擎都是一次性解码到目标结构中的。<br>　　Capstone的解码过程如此复杂，自然会对性能造成影响，我做过一个不太严格的性能测试，Capstone的性能消耗时间大概是udis86的5、6倍<br>（顺便吹一下，这里我给Capstone提交了一个小小的Pull Request,分别在<a target="_blank" rel="noopener" href="https://github.com/aquynh/capstone/pull/484">这里</a>和<a target="_blank" rel="noopener" href="https://github.com/aquynh/capstone/pull/505">这里</a>，<br>PR中附带了一个benchmark，经过测试性能提高了将近有20%），如果换种方式测试，udis86只使用<code>ud_decode</code>进行解码，而Capstone没有独立的解码接口，<br>需要做一些Hack，也让它不生成汇编文本，那么Capstone的消耗时间大概是udis86的2倍多，<br>由此可见Capstone的文本操作又比udis86慢更多。<br>　　其次，Capstone的内存消耗很大，解码一条指令时你传入的指令结构<code>cs_insn</code>必须由动态分配函数来分配，并且还要分配两次，一次是cs_insn，一次是cs_detail。<br>这会造成巨量的内存碎片，另外，每一条指令的结构体都很大，有多大我不记得了，<code>sizeof(cs_insn)</code>+<code>sizeof(cs_detail)</code>好像至少在2K以上。<br>必须使用<font color='red'>动态内存</font>这一点是Capstone与其他反汇编引擎不一样的地方。<br>如果要使用Capstone做大量指令分析的话，那么得给它配一个固定对象内存分配器才行，那样能稍微缓解一下内存碎片情况，也能提高一点性能。<br>　　可能是基于以上理由，x64dbg社区本来最开始是使用BeaEngine作为支撑基础的，但是BeaEngine总是爆出不少BUG，所以后来选择由Capstone替换，<br>但是也仅用Capstone来做GUI的文本反汇编，因为它解码速度虽然不行，但是BUG很少（毕竟LLVM有苹果那么大个公司做支撑），<br>而流图和指令分析（还不完善）目前仍然使用的BeaEngine，这也是没办法的事，毕竟性能也很重要。<br>　　还有一个问题，如果你需要的是解码能力强的反汇编引擎，那么建议你在选择前先对比一下各引擎的解码结构，有没有你需要或者必须有的字段。<br>　　因为Capstone有一个坑爹的地方，虽然其本身的解码能力其实很强的，但是Capstone把中间层封装了一遍，只暴露其认为需要暴露的字段，<br>并且其主要维护者有点固执（也可以说严谨），他坚持认为不太常用的字段没必要暴露出来，而接口是越简洁越好。<br>　　比如说指令中立即数Immediate所在的偏移，内存操作数中Displacement所在的偏移，在内部结构<code>InternalInstruction</code>中本来是有的，但是复制到公开结构<code>cs_insn</code>结构中就丢弃了。<br>还有<code>REP</code>与<code>REPE</code>前缀，虽然都是同一个常量表示，但是配上不同指令功能还是不一样的，对于这个，capstone内部有一个<code>valid_repe</code>函数可以区别，<br>但是也没有暴露到公开结构中，都当做<code>REP</code>来识别。虽然这些都很冷门，但是做指令分析和变形，这些还是很有用处的。<br>　　我个人认为capstone的接口用起来实在让人不爽，但是它的功能又实在太强大，如果研究下其源码的内部构造，会发现很多接口没提供，但是内部却有的好东西，<br>所以我自己维护了一个<a target="_blank" rel="noopener" href="https://github.com/bughoho/capstone">分支</a>，痛并快乐着的使用着。</p>
+<p>##其他<br>　　其实还有XDE，不过我没使用过，就不做评论了。<br>　　另外，<a target="_blank" rel="noopener" href="https://github.com/DarthTon/Blackbone">blackbone</a>中含有一个长度反汇编引擎也值得一提，名字叫<code>ldasm</code>，其实它也算不上一个引擎，因为它只有一个函数，<br>作用只是计算一条指令的长度，在hook的时候重定位跳转指令时很有用处。<a target="_blank" rel="noopener" href="https://github.com/DarthTon/Blackbone/blob/master/src/BlackBone/Asm/LDasm.c">代码传送门</a></p>
+<p>##总结<br>　　这几款反汇编引擎各有长处（OD除外。。），但是又各自有那么一丁点儿的缺陷，这世上没有完美的事情，人家都开源了，有的用就不错了，自己总要做些事情不是？<br>挑一款好用的库，使用过程中发现BUG，给社区提交个Issue，或者做个解决方案再发个Pull Request，也算付了使用费了。  </p>
+<table>
+<thead>
+<tr>
+<th align="center">特　	性</th>
+<th align="left">比较</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">性能</td>
+<td align="left">udis86 &gt; BeaEngine &gt; capstone</td>
+</tr>
+<tr>
+<td align="center">解码能力</td>
+<td align="left">capstone &gt; BeaEngine &gt; udis86 (udis86不支持寄存器分析,其余解码能力是相近的)</td>
+</tr>
+<tr>
+<td align="center">平台支持</td>
+<td align="left">capstone &gt; (udis86 &#x3D; BeaEngine)</td>
+</tr>
+<tr>
+<td align="center">X86扩展指令集</td>
+<td align="left">capstone &gt; (udis86 ≈BeaEngine)</td>
+</tr>
+</tbody></table>
+<p>　　如果你需要的是一个X86&#x2F;64下的性能又好同时解码能力又强的反汇编引擎，并且不需要寄存器分析这种特技的话，那么udis86合适你；<br>如果你还需要带寄存器分析功能的话，那么BeaEngine与capstone合适你；如果你还需要ARM构架支持的话，capstone应该会更适合你。<br>　　每一款引擎各有优劣，使用起来仁者见仁智者见智，鞋子合不合适只有自己的脚才知道了。</p>
+<p>更多内容请关注<a href="https://sirtech.cc/">我的博客</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sirtech.cc">先生请出山</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sirtech.cc/2015/11/08/ge-chong-kai-yuan-hui-bian-fan-hui-bian-yin-qing-de-fei-zhuan-ye-bi-jiao/">https://sirtech.cc/2015/11/08/ge-chong-kai-yuan-hui-bian-fan-hui-bian-yin-qing-de-fei-zhuan-ye-bi-jiao/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://sirtech.cc" target="_blank">先生请出山</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://assets.sirtech.cc/img/202404051113084.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/04/04/shi-yong-vscode-remote-ssh-lian-jie-dao-qun-hui-dsm/" title="使用 VSCode Remote SSH 连接到群晖 DSM"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">使用 VSCode Remote SSH 连接到群晖 DSM</div></div></a><a class="next-post pull-right" href="/2015/11/04/yy-2015-ni-xiang-fen-xi-yi-di-ceng-tong-xun-ji-zhi/" title="YY 2015 逆向分析(一) 底层通讯机制"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">YY 2015 逆向分析(一) 底层通讯机制</div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="https://assets.sirtech.cc/img/202404051113084.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">先生请出山</div><div class="author-info-description">要生活得漂亮，需要付出极大忍耐，一不解释，二不抱怨，绝对是个人才。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/bughoho"><i class="https://assets.sirtech.cc/img/nav.webp"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/bughoho" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:bughoho@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/17/da-jian-cloudflare-worker-shi-xian-zi-you-xia-zai-huggingface-da-mo-xing/" title="搭建cloudflare worker实现全速下载huggingface大模型">搭建cloudflare worker实现全速下载huggingface大模型</a><time datetime="2024-10-17T23:44:25.000Z" title="发表于 2024-10-17 23:44:25">2024-10-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/15/yi-xing-ming-ling-bei-fen-rong-qi-zhong-de-shu-ju-juan/" title="一条命令备份容器中的数据卷">一条命令备份容器中的数据卷</a><time datetime="2024-10-15T14:14:40.000Z" title="发表于 2024-10-15 14:14:40">2024-10-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/07/wei-xin-gong-zhong-hao-zhuan-huan-wei-rss-de-fang-fa/" title="微信公众号转换为RSS的方法">微信公众号转换为RSS的方法</a><time datetime="2024-10-07T00:00:00.000Z" title="发表于 2024-10-07 00:00:00">2024-10-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/06/shi-yong-usb-ip-jiang-usb-chong-ding-xiang-dao-yuan-cheng-zhu-ji/" title="使用usb-ip将USB重定向到远程主机">使用usb-ip将USB重定向到远程主机</a><time datetime="2024-06-06T00:00:00.000Z" title="发表于 2024-06-06 00:00:00">2024-06-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/02/xi-qu-zi-dong-she-zhi-ip-bai-ming-dan/" title="携趣自动设置IP白名单">携趣自动设置IP白名单</a><time datetime="2024-06-02T00:00:00.000Z" title="发表于 2024-06-02 00:00:00">2024-06-02</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 先生请出山</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.0.0"></script><script src="/js/main.js?v=5.0.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://comment.sirtech.cc',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, {"placeholder":"欢迎评论,评论前请先登录,支持第三方登录."}))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjaxSendOnce', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = () => {
+    if (initFn) initWaline(initFn)
+    else {
+      btf.getCSS('https://cdn.jsdelivr.net/npm/@waline/client@3.3.2/dist/waline.min.css')
+        .then(() => import('https://cdn.jsdelivr.net/npm/@waline/client@3.3.2/dist/waline.min.js'))
+        .then(({ init }) => {
+          initFn = init || Waline.init
+          initWaline(initFn)
+          window.walineFn = initFn
+        })
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

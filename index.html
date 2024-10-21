@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>先生请出山</title><meta name="author" content="先生请出山"><meta name="copyright" content="先生请出山"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="先生请出山">
+<meta property="og:url" content="https://sirtech.cc/index.html">
+<meta property="og:site_name" content="先生请出山">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://assets.sirtech.cc/img/202404051113084.png">
+<meta property="article:author" content="先生请出山">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://assets.sirtech.cc/img/202404051113084.png"><link rel="shortcut icon" href="https://assets.sirtech.cc/img/202404051113084.png"><link rel="canonical" href="https://sirtech.cc/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="baidu-site-verification" content="codeva-PYZD91ZQgs"/><link rel="stylesheet" href="/css/index.css?v=5.0.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?3f2e1fdd5af8257f92ee9d6bef1b8dca";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-S6J6RHCLSK"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-S6J6RHCLSK')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-S6J6RHCLSK', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oe3vigjws6");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'medium_zoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '先生请出山',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2024-10-21 05:54:18'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="先生请出山" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://assets.sirtech.cc/img/202404051113084.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-language"></i><span> 语言</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://en.sirtech.cc/"><i class="fa-fw fas fa-e"></i><span> English</span></a></li><li><a class="site-page child" href="/"><i class="fa-fw fas fa-c"></i><span> 中文</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(https://assets.sirtech.cc/img/202404052300061.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="https://assets.sirtech.cc/img/nav.webp" alt="Logo"><span class="site-name">先生请出山</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-language"></i><span> 语言</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://en.sirtech.cc/"><i class="fa-fw fas fa-e"></i><span> English</span></a></li><li><a class="site-page child" href="/"><i class="fa-fw fas fa-c"></i><span> 中文</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">先生请出山</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/bughoho" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:bughoho@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/10/17/da-jian-cloudflare-worker-shi-xian-zi-you-xia-zai-huggingface-da-mo-xing/" title="搭建cloudflare worker实现全速下载huggingface大模型">搭建cloudflare worker实现全速下载huggingface大模型</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-10-17T23:44:25.000Z" title="发表于 2024-10-17 23:44:25">2024-10-17</time></span></div><div class="content">序最近在玩ComfyUI的时候受到了下载模型的强烈痛苦，网上找了一圈也没有找到称心如意的工具，直接用代理下载大模型的话，流量很快就会告急…，而huggingface-cli和ht-transfer也各有各的问题。最后自己想了个办法，通过aria2可以多源下载的特点，在多个开源脚本的基础上自己糊了一个脚本，实现了满速下载大模型，具体细节请看这里。这里主要记录一下cloudflare...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/10/15/yi-xing-ming-ling-bei-fen-rong-qi-zhong-de-shu-ju-juan/" title="一条命令备份容器中的数据卷">一条命令备份容器中的数据卷</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-10-15T14:14:40.000Z" title="发表于 2024-10-15 14:14:40">2024-10-15</time></span></div><div class="content">一行命令备份容器中的数据卷前言  之前在创建miniflux容器时使用了官方的docker-compose.yml配置： 12345678910111213141516171819202122232425262728services:  miniflux:    image: miniflux/miniflux:latest    ports:      - &quot;80:8080&quot;    depends_on:      db:        condition: service_healthy    environment:      - DATABASE_URL=postgres://miniflux:secret@db/miniflux?sslmode=disable      - RUN_MIGRATIONS=1      - CREATE_ADMIN=1      - ADMIN_USERNAME=admin      - ADMIN_PASSWORD=test123  db:    image: postgres:15    environment:...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/10/07/wei-xin-gong-zhong-hao-zhuan-huan-wei-rss-de-fang-fa/" title="微信公众号转换为RSS的方法">微信公众号转换为RSS的方法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-10-07T00:00:00.000Z" title="发表于 2024-10-07 00:00:00">2024-10-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></span></div><div class="content">1.在PC微信上搜索公众号 2.随便点一个标签，将会从浏览器打开一个网页 3.从浏览器地址栏复制这个页面1https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzA5MTIxNTY4MQ==&amp;action=getalbum&amp;album_id=2959126655292211206&amp;scene=126#wechat_redirect  4.将微信参数__biz和album_id提取出来组成1MzA5MTIxNTY4MQ==/2959126655292211206  转换成如下格式： 1http://192.168.1.xxx:1200/wechat/mp/msgalbum/MzA5MTIxNTY4MQ==/2959126655292211206  即可得到微信公众号的rss 说明其中 http://192.168.1.xxx:1200 是自建的rsshub服务和端口号，/wechat/mp/msgalbum/...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/06/06/shi-yong-usb-ip-jiang-usb-chong-ding-xiang-dao-yuan-cheng-zhu-ji/" title="使用usb-ip将USB重定向到远程主机">使用usb-ip将USB重定向到远程主机</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-06-06T00:00:00.000Z" title="发表于 2024-06-06 00:00:00">2024-06-06</time></span></div><div class="content">使用usb-ip将USB重定向到远程主机</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/06/02/xi-qu-zi-dong-she-zhi-ip-bai-ming-dan/" title="携趣自动设置IP白名单">携趣自动设置IP白名单</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-06-02T00:00:00.000Z" title="发表于 2024-06-02 00:00:00">2024-06-02</time></span></div><div class="content">直接上代码：</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/05/19/shi-xian-liao-yi-ge-mou-ji-xu-jiao-yu-ping-tai-de-zi-dong-xue-xi-de-jiao-ben/" title="实现了一个某继续教育平台的自动学习的脚本">实现了一个某继续教育平台的自动学习的脚本</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-05-19T00:00:00.000Z" title="发表于 2024-05-19 00:00:00">2024-05-19</time></span></div><div class="content">直接上代码：</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/04/23/jie-suo-ying-pan-xian-zhi-50-kuai-qian-de-zhong-xing-ct321g2-xiao-zhu-ji-yong-ipxe-wu-pan-qi-dong-windows/" title="解锁硬盘限制！50块钱的中兴CT321G2小主机用ipxe无盘启动windows">解锁硬盘限制！50块钱的中兴CT321G2小主机用ipxe无盘启动windows</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-23T00:00:00.000Z" title="发表于 2024-04-23 00:00:00">2024-04-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/hardware/">hardware</a></span></div><div class="content">先说原因，在家里用apple tv串流到电脑上玩游戏，发现蓝牙连接手柄没有震动功能，手柄直连电脑是可以震动功能的，玩地平线时试过那个手柄震动功能之后，就再也回不去了，于是想找个便宜的方案曲线救国，海鲜市场50块钱淘了这个小主机，x86&#x2F;64构架，只有2g内存和4g硬盘，可玩性不高，但是cpu跟j1900差不多，usb口也很丰富，4个USB2.0+2个USB3.0接口，完全可以做书房电脑主机的usb延伸，顺便还可以跑点小程序也是没问题的。  找了个usb串流软件只能在windows下用，所以我准备装一个windows，但是4G硬盘存储太拉跨，装windows是完全不够用，也考虑过windows to go安装到u盘里，而windows to go对u盘的要求挺高，最便宜的价格都要100多了，已经超出了小主机的价格，完全无法接受，所以想到了用iscsi无盘启动的方式，经过几天的折腾，最终完美启动。 要准备的文件 wimboot:用来启动windows...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/04/04/shi-yong-vscode-remote-ssh-lian-jie-dao-qun-hui-dsm/" title="使用 VSCode Remote SSH 连接到群晖 DSM">使用 VSCode Remote SSH 连接到群晖 DSM</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-04T00:00:00.000Z" title="发表于 2024-04-04 00:00:00">2024-04-04</time></span></div><div class="content">使用 VSCode Remote SSH 连接到群晖 DSM Quick Startvscode直接ssh进入群晖时会出现：  The remote host may not meet VS Code Server’s prerequisites for glibc and libstdc++  https://community.synology.com/enu/forum/10/post/153781 解决办法如下： ssh命令行进入群晖1ssh yourname@192.168.1.x  1sudo vim /usr/bin/ldd  12#/bin/sh echo &quot;ldd 2.20&quot;  1chmod 755 /usr/bin/ldd  开启端口转发123sudo cp sshd_config sshd_config.bckcd /etc/ssh//etc/ssh$ sudo vim sshd_config  修改配置 12AllowAgentForwarding yes AllowTcpForwarding...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2015/11/08/ge-chong-kai-yuan-hui-bian-fan-hui-bian-yin-qing-de-fei-zhuan-ye-bi-jiao/" title="各种开源汇编、反汇编引擎的非专业比较">各种开源汇编、反汇编引擎的非专业比较</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2015-11-08T00:00:00.000Z" title="发表于 2015-11-08 00:00:00">2015-11-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/disassembly/">disassembly</a></span></div><div class="content">　　由于平时业余兴趣和工作需要，研究过并使用过时下流行的各种开源的x86&#x2F;64汇编和反汇编引擎。如果要对汇编指令进行分析和操作，要么自己研究Intel指令集写一个，要么就用现成的开源引擎。自己写太浪费时间，又是苦力活，还容易出错，所以还是使用现成的好一点。   这里对我曾使用过的比较流行的反汇编引擎做个比较，我使用过的反汇编引擎有：   ##1....</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2015/11/04/yy-2015-ni-xiang-fen-xi-yi-di-ceng-tong-xun-ji-zhi/" title="YY 2015 逆向分析(一) 底层通讯机制">YY 2015 逆向分析(一) 底层通讯机制</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2015-11-04T00:00:00.000Z" title="发表于 2015-11-04 00:00:00">2015-11-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Revese-Engineering/">Revese Engineering</a></span></div><div class="content">YY 2015 逆向分析(一) 底层通讯机制 前言　　之前研究过YY 6.2版本的协议，今天有没事又看了一次，发现现在的版本8.3.0.0版本较之前又有了翻天覆地的变化，密钥交互时不再使用ZLIB压缩解压缩，并且所有的命令字是１００％的全部更新了，但是通讯算法还是没变，仍然是RSA + RC4。 底层通讯过程 YY的封包结构是4字节长度，4字节命令字，剩下的就是数据了，也就是说，根据首4字节就可以将包分割开。但是也有一些其他情况，比如嵌套包，一个命令字包中又包含了一个或者多个子命令包，这些子命令包有时是独立处理，有时需要用到父包的数据。  首先,客户端先给几个(我这里是4个)服务器发送UDP包,请求IP地址,服务器会根据收到的版本号下发对应的支持此版本号的服务器和列表。   123456761 00 00 00 1E 73 00 00 C8 00 FF FF FF FF FF FF   a....s..?.......FF FF 03 01 00 00 00 00 00 00 20 00 35 34 64 37     ........ .54d763 62 39 31 35...</div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="https://assets.sirtech.cc/img/202404051113084.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">先生请出山</div><div class="author-info-description">要生活得漂亮，需要付出极大忍耐，一不解释，二不抱怨，绝对是个人才。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/bughoho"><i class="https://assets.sirtech.cc/img/nav.webp"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/bughoho" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:bughoho@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/17/da-jian-cloudflare-worker-shi-xian-zi-you-xia-zai-huggingface-da-mo-xing/" title="搭建cloudflare worker实现全速下载huggingface大模型">搭建cloudflare worker实现全速下载huggingface大模型</a><time datetime="2024-10-17T23:44:25.000Z" title="发表于 2024-10-17 23:44:25">2024-10-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/15/yi-xing-ming-ling-bei-fen-rong-qi-zhong-de-shu-ju-juan/" title="一条命令备份容器中的数据卷">一条命令备份容器中的数据卷</a><time datetime="2024-10-15T14:14:40.000Z" title="发表于 2024-10-15 14:14:40">2024-10-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/07/wei-xin-gong-zhong-hao-zhuan-huan-wei-rss-de-fang-fa/" title="微信公众号转换为RSS的方法">微信公众号转换为RSS的方法</a><time datetime="2024-10-07T00:00:00.000Z" title="发表于 2024-10-07 00:00:00">2024-10-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/06/shi-yong-usb-ip-jiang-usb-chong-ding-xiang-dao-yuan-cheng-zhu-ji/" title="使用usb-ip将USB重定向到远程主机">使用usb-ip将USB重定向到远程主机</a><time datetime="2024-06-06T00:00:00.000Z" title="发表于 2024-06-06 00:00:00">2024-06-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/02/xi-qu-zi-dong-she-zhi-ip-bai-ming-dan/" title="携趣自动设置IP白名单">携趣自动设置IP白名单</a><time datetime="2024-06-02T00:00:00.000Z" title="发表于 2024-06-02 00:00:00">2024-06-02</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Revese-Engineering/"><span class="card-category-list-name">Revese Engineering</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/disassembly/"><span class="card-category-list-name">disassembly</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/hardware/"><span class="card-category-list-name">hardware</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/"><span class="card-category-list-name">技巧</span><span class="card-category-list-count">1</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/network/" style="font-size: 1.1em; color: #999">network</a> <a href="/tags/Synology/" style="font-size: 1.1em; color: #999">Synology</a> <a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 1.1em; color: #999">技巧</a> <a href="/tags/python/" style="font-size: 1.1em; color: #999">python</a> <a href="/tags/nas/" style="font-size: 1.1em; color: #999">nas</a> <a href="/tags/javascript/" style="font-size: 1.1em; color: #999">javascript</a> <a href="/tags/ReveseEngineering/" style="font-size: 1.1em; color: #999">ReveseEngineering</a> <a href="/tags/yy/" style="font-size: 1.1em; color: #999">yy</a> <a href="/tags/IPXE/" style="font-size: 1.1em; color: #999">IPXE</a> <a href="/tags/cloudflare/" style="font-size: 1.1em; color: #999">cloudflare</a> <a href="/tags/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/" style="font-size: 1.1em; color: #999">使用教程</a> <a href="/tags/windows/" style="font-size: 1.1em; color: #999">windows</a> <a href="/tags/%E9%9D%92%E9%BE%99/" style="font-size: 1.1em; color: #999">青龙</a> <a href="/tags/%E7%BE%A4%E6%99%96/" style="font-size: 1.5em; color: #99a9bf">群晖</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/10/">
+          <span class="card-archive-list-date">十月 2024</span>
+          <span class="card-archive-list-count">3</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/06/">
+          <span class="card-archive-list-date">六月 2024</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/05/">
+          <span class="card-archive-list-date">五月 2024</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/04/">
+          <span class="card-archive-list-date">四月 2024</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2015/11/">
+          <span class="card-archive-list-date">十一月 2015</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">10</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-10-21T05:54:18.299Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 先生请出山</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.0.0"></script><script src="/js/main.js?v=5.0.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      if (true) {
+        const from = '出自 ' + data.from
+        const sub = []
+        sub.unshift(data.hitokoto, from)
+        typedJSFn.init(sub)
+      } else {
+        document.getElementById('subtitle').textContent = data.hitokoto
+      }
+    })
+}
+typedJSFn.run(subtitleType)
+</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

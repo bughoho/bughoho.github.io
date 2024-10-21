@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>YY 2015 逆向分析(一) 底层通讯机制 | 先生请出山</title><meta name="author" content="先生请出山"><meta name="copyright" content="先生请出山"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="YY 2015 逆向分析(一) 底层通讯机制 前言　　之前研究过YY 6.2版本的协议，今天有没事又看了一次，发现现在的版本8.3.0.0版本较之前又有了翻天覆地的变化，密钥交互时不再使用ZLIB压缩解压缩，并且所有的命令字是１００％的全部更新了，但是通讯算法还是没变，仍然是RSA + RC4。 底层通讯过程 YY的封包结构是4字节长度，4字节命令字，剩下的就是数据了，也就是说，根据首4字节就可以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YY 2015 逆向分析(一) 底层通讯机制">
+<meta property="og:url" content="https://sirtech.cc/2015/11/04/yy-2015-ni-xiang-fen-xi-yi-di-ceng-tong-xun-ji-zhi/index.html">
+<meta property="og:site_name" content="先生请出山">
+<meta property="og:description" content="YY 2015 逆向分析(一) 底层通讯机制 前言　　之前研究过YY 6.2版本的协议，今天有没事又看了一次，发现现在的版本8.3.0.0版本较之前又有了翻天覆地的变化，密钥交互时不再使用ZLIB压缩解压缩，并且所有的命令字是１００％的全部更新了，但是通讯算法还是没变，仍然是RSA + RC4。 底层通讯过程 YY的封包结构是4字节长度，4字节命令字，剩下的就是数据了，也就是说，根据首4字节就可以">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://assets.sirtech.cc/img/202404051113084.png">
+<meta property="article:published_time" content="2015-11-04T00:00:00.000Z">
+<meta property="article:modified_time" content="2015-11-04T00:00:00.000Z">
+<meta property="article:author" content="先生请出山">
+<meta property="article:tag" content="yy">
+<meta property="article:tag" content="ReveseEngineering">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://assets.sirtech.cc/img/202404051113084.png"><link rel="shortcut icon" href="https://assets.sirtech.cc/img/202404051113084.png"><link rel="canonical" href="https://sirtech.cc/2015/11/04/yy-2015-ni-xiang-fen-xi-yi-di-ceng-tong-xun-ji-zhi/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="baidu-site-verification" content="codeva-PYZD91ZQgs"/><link rel="stylesheet" href="/css/index.css?v=5.0.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?3f2e1fdd5af8257f92ee9d6bef1b8dca";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-S6J6RHCLSK"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-S6J6RHCLSK')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-S6J6RHCLSK', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oe3vigjws6");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'medium_zoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'YY 2015 逆向分析(一) 底层通讯机制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2015-11-04 00:00:00'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="先生请出山" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://assets.sirtech.cc/img/202404051113084.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-language"></i><span> 语言</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://en.sirtech.cc/"><i class="fa-fw fas fa-e"></i><span> English</span></a></li><li><a class="site-page child" href="/"><i class="fa-fw fas fa-c"></i><span> 中文</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="https://assets.sirtech.cc/img/nav.webp" alt="Logo"><span class="site-name">先生请出山</span></a><a class="nav-page-title" href="/"><span class="site-name">YY 2015 逆向分析(一) 底层通讯机制</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-language"></i><span> 语言</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://en.sirtech.cc/"><i class="fa-fw fas fa-e"></i><span> English</span></a></li><li><a class="site-page child" href="/"><i class="fa-fw fas fa-c"></i><span> 中文</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">YY 2015 逆向分析(一) 底层通讯机制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2015-11-04T00:00:00.000Z" title="发表于 2015-11-04 00:00:00">2015-11-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2015-11-04T00:00:00.000Z" title="更新于 2015-11-04 00:00:00">2015-11-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Revese-Engineering/">Revese Engineering</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>YY 2015 逆向分析(一) 底层通讯机制</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>　　之前研究过YY 6.2版本的协议，今天有没事又看了一次，发现现在的版本8.3.0.0版本较之前又有了翻天覆地的变化，<br>密钥交互时不再使用<code>ZLIB</code>压缩解压缩，并且所有的命令字是１００％的全部更新了，但是通讯算法还是没变，仍然是<code>RSA</code> + <code>RC4</code>。</p>
+<h2 id="底层通讯过程"><a href="#底层通讯过程" class="headerlink" title="底层通讯过程"></a>底层通讯过程</h2><ol start="0">
+<li><p>YY的封包结构是4字节长度，4字节命令字，剩下的就是数据了，也就是说，根据首4字节就可以将包分割开。但是也有一些其他情况，<br>比如嵌套包，一个命令字包中又包含了一个或者多个子命令包，这些子命令包有时是独立处理，有时需要用到父包的数据。</p>
+</li>
+<li><p>首先,客户端先给几个(我这里是4个)服务器发送<code>UDP</code>包,请求IP地址,服务器会根据收到的版本号下发对应的支持此版本号的服务器和列表。</p>
+</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">61 00 00 00 1E 73 00 00 C8 00 FF FF FF FF FF FF   a....s..?.......</span><br><span class="line">FF FF 03 01 00 00 00 00 00 00 20 00 35 34 64 37     ........ .54d7</span><br><span class="line">63 62 39 31 35 38 31 38 32 30 39 38 65 38 36 32   cb9158182098e862</span><br><span class="line">66 66 38 39 30 64 62 66 61 33 63 30 00 00 30 80   ff890dbfa3c0..0.</span><br><span class="line">07 00 38 2E 33 2E 30 2E 30 02 00 79 79 00 00 00   ..8.3.0.0..yy...</span><br><span class="line">00 00 00 00 00 00 00 04 08 00 00 00 00 00 00 00   ................</span><br><span class="line">00††††††††††††††††††††††    .</span><br></pre></td></tr></table></figure>
+
+<p>然后其中一个会返回<code>0x741E</code>,返回请求到的IP列表(其他服务器可能也返回了,但是这时客户端收到一个就不再继续接收了)。<br>注意这里每个包的+4处是命令字（下同），比如这里是0x731E。</p>
+<ol>
+<li>客户端从收到的ＩＰ列表中随机选几个（我这里是６个）发送登陆请求，其中５个是<code>UDP</code>，１个<code>TCP</code>。包的数据都是一样的。</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">34 00 00 00 01 14 00 00 C8 00 00 00 00 00 30 80   4.......?.....0.</span><br><span class="line">FF FF FF FF 08 00 62 75 67 73 74 65 73 74 00 00   ..bugstest..</span><br><span class="line">04 08 00 00 01 00 00 00 00 00 00 00 00 00 00 00   ................</span><br><span class="line">00 00 00 00††††††††††††††††††   ....</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>响应最快的那个服务器返回<code>0x1501</code>命令，+0C处是反馈结果，当为<code>0xC8</code>时表示一切正常，后面的数据就是真正要登陆的服务器<br>的<code>IP</code>和<code>Port</code>了；如果为其他值（比如<code>97 01 00 00</code>），表示版本过低，需要升级。</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">54 00 00 00 01 15 00 00 C8 00 00 00 C8 00 00 00   T.......?...?...</span><br><span class="line">02 00 00 00 70 75 DC EB DA 85 3B 14 00 00 03 00   ....pu????;.....</span><br><span class="line">00 00 91 1F 39 04 51 00 6F B2 91 8A 4D E6 3B 14   ..?9.Q.o???M?;.</span><br><span class="line">00 00 03 00 00 00 94 1F 39 04 54 00 00 00 00 00   ......?9.T.....</span><br><span class="line">01 00 11 00 AB 5B 54 76 00 00 00 00 00 00 00 00   ....?[Tv........</span><br><span class="line">F4 01 00 00††††††††††††††††††   ?...</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>此时才是真正的登陆过程，一切从这里开始。客户端根据收到的登陆用的IP列表，随机选择一个建立连接，连接成功后，客户端主动给服务器发送一条密钥交互包，命令字是<code>0x1104</code>或者<code>0x3204</code>（因为登陆时会连接多个服务器，比如验证服务器＼频道服务器＼好友服务器，<br>命令字根据类型的不同是不一样的）</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">53 00 00 00 04 11 00 00 C8 00 40 00 E9 03 40 F2   S.....?@.?@?</span><br><span class="line">4D ED C4 86 32 9B 25 F1 7A D8 94 70 D5 E2 20 6C   M砟??駔財p这 l</span><br><span class="line">F0 B7 AF FD 5A DD A4 A6 F3 CA F5 8C CE 7B 9B CB   鸱Z荬术屛&#123;浰</span><br><span class="line">2D AB 49 45 04 61 93 9C 4F 7D 40 DE E1 E4 8B 19   -獻Ea摐O&#125;@掎鋴</span><br><span class="line">BC 89 C2 E0 76 29 58 2E 2F BB A6 51 01 00 03 00   級锣v)X./沪Q..</span><br><span class="line">00 00 00                                          ...</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">66 00 00 00 04 32 00 00 C8 00 40 00 E9 03 40 F2  f...2..?@.?@?</span><br><span class="line">4D ED C4 86 32 9B 25 F1 7A D8 94 70 D5 E2 20 6C  M砟??駔財p这 l</span><br><span class="line">F0 B7 AF FD 5A DD A4 A6 F3 CA F5 8C CE 7B 9B CB  鸱Z荬术屛&#123;浰</span><br><span class="line">2D AB 49 45 04 61 93 9C 4F 7D 40 DE E1 E4 8B 19  -獻Ea摐O&#125;@掎鋴</span><br><span class="line">BC 89 C2 E0 76 29 58 2E 2F BB A6 51 01 00 03 13  級锣v)X./沪Q.</span><br><span class="line">00 00 00 13 00 00 00 04 E8 0B 00 C8 00 00 00 05  ......?.?..</span><br><span class="line">00 6C 6F 67 69 6E                                .login</span><br></pre></td></tr></table></figure>
+
+<p>+4处的0x40字节是客户端生成的公钥，即<code>RSA</code>的<code>N</code>；+0x4E处一字节是<code>RSA</code>的<code>E</code>。这个包的作用是通知服务端，下发的<code>RC4</code>密钥使用这个RSA密钥进行加密，</p>
+<ol start="5">
+<li>服务器收到客户端的密钥后，返回0x3304\0x1504，以前这个包的key是经过zlib压缩的，现在取消掉了，估计服务器吃不消给优化掉了。</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">50 00 00 00 04 15 00 00 C8 00 40 00 7B 89 12 1B  P.........@.&#123;...</span><br><span class="line">FE 8F AC 7A BF 02 D4 34 42 D9 52 29 21 EA 0D 13  ...z...4B.R)!...</span><br><span class="line">27 EC C0 11 BB 59 A8 7F 9C 95 AE B7 9C 09 5A 3C  &#x27;....Y........Z&lt;</span><br><span class="line">43 A1 55 8E DA A0 2D F6 CA E9 EB F4 DC D3 DC C5  C.U...-.........</span><br><span class="line">64 8E 75 91 AE 32 A4 28 04 88 CA 79 00 00 00 00  d.u..2.(...y....</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">18 09 00 00 04 33 00 00  C8 00 40 00 22 79 01 D6 .....3....@.&quot;y..</span><br><span class="line">58 E0 86 9C A2 57 37 21  89 4B BF 7F C2 F2 BE 64 X....W7!.K.....d</span><br><span class="line">48 00 8B E6 14 82 C3 0E  D0 FF 80 3C 2C 60 F2 DD H..........&lt;,`..</span><br><span class="line">7F BA A4 67 17 C1 DA CA  F4 D6 C0 4E B2 EE A7 90 ...g.......N....</span><br><span class="line">23 3E 46 1D D4 A4 B4 E5  91 14 FE F5 C8 08 00 00 #&gt;F.............</span><br><span class="line">C8 08 00 00 04 E9 0B 00  C8 00 00 00 BA 08 B6 08 ................</span><br><span class="line">00 00 06 00 04 00 00 00  FF FF 00 00 17 27 54 08 .............&#x27;T.</span><br><span class="line">00 00 78 DA 8D 57 4D 6C  1B C7 15 7E 43 AD 4D 49 ..x..WMl...~C.MI</span><br><span class="line">D6 8F AD C6 86 64 BB 8E  9A BA 46 0E 75 10 5B 76 .....d....F.u.[v</span><br><span class="line">E5 9C 32 4B 8A 22 F5 47  D2 22 25 45 69 22 7B 45 ..2K.&quot;.G.&quot;%Ei&quot;&#123;E</span><br><span class="line">...后面省略</span><br></pre></td></tr></table></figure>
+
+<p>顺便一提，<code>3304</code>这个包除了密钥外还下发了一个字节码模块，交给客户端初始化动态环境，这样的数据包后面还有很多，都是服务端下发的动态检测代码。</p>
+<p>这两个包的<code>0C</code>处开始的<code>0x40</code>字节便是下发的经过<code>RSA</code>加密过的<code>RC4</code>密钥了，经过<code>RSA</code>解密后的RC4密钥复制成两份，一份是专门用来加密，一份专门用来解密。<br>到这一步，YY密钥协商过程完成，后面发送的数据都是加密数据了。</p>
+<p>至于算法的实现在<code>dwUtility.dll</code>中的导出函数，这里挑出几个用得到的翻译一下功能：</p>
+<table>
+<thead>
+<tr>
+<th>导出函数名称</th>
+<th align="center">功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DwUtility::dwBaseFunc::dwUtilityrgk</td>
+<td align="center">初始化RSA结构</td>
+</tr>
+<tr>
+<td>DwUtility::dwBaseFunc::dwUtilityrpd</td>
+<td align="center">RSA解密算法</td>
+</tr>
+<tr>
+<td>DwUtility::dwBaseFunc::dwUtilitybb</td>
+<td align="center">将大数转换为二进制</td>
+</tr>
+<tr>
+<td>DwUtility::dwBaseFunc::dwUtilityrsk</td>
+<td align="center">初始化RC4结构</td>
+</tr>
+<tr>
+<td>DwUtility::dwBaseFunc::dwUtilityr</td>
+<td align="center">RC4加\解密算法</td>
+</tr>
+</tbody></table>
+<p>以上就是几个关键的算法了，这个DLL中还有很多其他基础的功能，有兴趣的可以自己去研究，这里就不一一列举了。</p>
+<p>由于收发数据有的加密有的不加密，并且连接的SOCKET太多，只用OD分析实在不方便，为此我写了一个现实加密前和解密后的封包分析工具，<br>加上了每个原始包对应的SOCKET加以区分。show一下：）</p>
+<p><code>图片丢失</code></p>
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>YY在登陆时是一次性给N个服务器发送请求，谁快用谁，这对登陆服务器集群的性能要求特别高，因为这样<br>每个服务器处理所需要的资源成倍提高。通过建立密钥这个过程可以看出YY把负载均衡真的是做到了极致。</p>
+<p>这一章就到此结束，下次有空写下一章YY登陆的封包实际内容分析。</p>
+<p>PS:研究仅为学习，没有任何不纯目的：）</p>
+<p>如有任何疑问请联系:bughoho[at]gmail.com，欢迎指出错误。</p>
+<p>更多内容请关注<a href="https://sirtech.cc/">我的博客</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sirtech.cc">先生请出山</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sirtech.cc/2015/11/04/yy-2015-ni-xiang-fen-xi-yi-di-ceng-tong-xun-ji-zhi/">https://sirtech.cc/2015/11/04/yy-2015-ni-xiang-fen-xi-yi-di-ceng-tong-xun-ji-zhi/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://sirtech.cc" target="_blank">先生请出山</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/yy/">yy</a><a class="post-meta__tags" href="/tags/ReveseEngineering/">ReveseEngineering</a><a class="post-meta__tags" href="/tags/network/">network</a></div><div class="post-share"><div class="social-share" data-image="https://assets.sirtech.cc/img/202404051113084.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-full" href="/2015/11/08/ge-chong-kai-yuan-hui-bian-fan-hui-bian-yin-qing-de-fei-zhuan-ye-bi-jiao/" title="各种开源汇编、反汇编引擎的非专业比较"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">各种开源汇编、反汇编引擎的非专业比较</div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="https://assets.sirtech.cc/img/202404051113084.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">先生请出山</div><div class="author-info-description">要生活得漂亮，需要付出极大忍耐，一不解释，二不抱怨，绝对是个人才。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/bughoho"><i class="https://assets.sirtech.cc/img/nav.webp"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/bughoho" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:bughoho@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E9%80%9A%E8%AE%AF%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">底层通讯过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9D%9F"><span class="toc-number">3.</span> <span class="toc-text">结束</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/17/da-jian-cloudflare-worker-shi-xian-zi-you-xia-zai-huggingface-da-mo-xing/" title="搭建cloudflare worker实现全速下载huggingface大模型">搭建cloudflare worker实现全速下载huggingface大模型</a><time datetime="2024-10-17T23:44:25.000Z" title="发表于 2024-10-17 23:44:25">2024-10-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/15/yi-xing-ming-ling-bei-fen-rong-qi-zhong-de-shu-ju-juan/" title="一条命令备份容器中的数据卷">一条命令备份容器中的数据卷</a><time datetime="2024-10-15T14:14:40.000Z" title="发表于 2024-10-15 14:14:40">2024-10-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/07/wei-xin-gong-zhong-hao-zhuan-huan-wei-rss-de-fang-fa/" title="微信公众号转换为RSS的方法">微信公众号转换为RSS的方法</a><time datetime="2024-10-07T00:00:00.000Z" title="发表于 2024-10-07 00:00:00">2024-10-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/06/shi-yong-usb-ip-jiang-usb-chong-ding-xiang-dao-yuan-cheng-zhu-ji/" title="使用usb-ip将USB重定向到远程主机">使用usb-ip将USB重定向到远程主机</a><time datetime="2024-06-06T00:00:00.000Z" title="发表于 2024-06-06 00:00:00">2024-06-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/02/xi-qu-zi-dong-she-zhi-ip-bai-ming-dan/" title="携趣自动设置IP白名单">携趣自动设置IP白名单</a><time datetime="2024-06-02T00:00:00.000Z" title="发表于 2024-06-02 00:00:00">2024-06-02</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 先生请出山</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.0.0"></script><script src="/js/main.js?v=5.0.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://comment.sirtech.cc',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, {"placeholder":"欢迎评论,评论前请先登录,支持第三方登录."}))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjaxSendOnce', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = () => {
+    if (initFn) initWaline(initFn)
+    else {
+      btf.getCSS('https://cdn.jsdelivr.net/npm/@waline/client@3.3.2/dist/waline.min.css')
+        .then(() => import('https://cdn.jsdelivr.net/npm/@waline/client@3.3.2/dist/waline.min.js'))
+        .then(({ init }) => {
+          initFn = init || Waline.init
+          initWaline(initFn)
+          window.walineFn = initFn
+        })
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
